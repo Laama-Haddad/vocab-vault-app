@@ -2,4 +2,7 @@
     <string name="app_name">VocabVault</string>
     <string name="word_placeholder_text_input">Enter Your Word</string>
     <string name="translate_title_button">Translate</string>
+    <string name="us">US</string>
+    <string name="uk">UK</string>
+    <string name="more">more</string>
 </resources>

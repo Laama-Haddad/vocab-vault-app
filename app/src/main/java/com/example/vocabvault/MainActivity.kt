@@ -1,48 +1,44 @@
 package com.example.vocabvault
 
+import CustomAdapter
+import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.util.Log.*
+import android.util.Log.d
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.EditText
+import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.*
 import java.io.IOException
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ResponseCallback {
     lateinit var wordInputText: TextInputEditText
     lateinit var translateBtn: Button
-    lateinit var resultEditText: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initializeViews()
         wordInputText.addTextChangedListener {
-            if (wordInputText.text.toString().trim().isEmpty()) {
-                resultEditText.text.clear()
-                translateBtn.isEnabled = false
-            } else {
-                translateBtn.isEnabled = true
-            }
+            translateBtn.isEnabled = !wordInputText.text.toString().trim().isEmpty()
         }
         translateBtn.setOnClickListener {
             val word = wordInputText.text
             if (word.toString().trim().isNotEmpty()) {
-                fetchWordDetails(word.toString())
+                fetchWordDetails(word.toString(), this)
             }
-
         }
     }
+
     private fun initializeViews() {
         wordInputText = findViewById(R.id.word_text_input_id)
         translateBtn = findViewById(R.id.translate_button_id)
-        resultEditText = findViewById(R.id.result_edit_text_id)
         translateBtn.isEnabled = false
     }
-    private fun fetchWordDetails(word: String) {
+
+    private fun fetchWordDetails(word: String, callback: ResponseCallback) {
         val url = "https://api.dictionaryapi.dev/api/v2/entries/en/$word"
         val client = OkHttpClient()
 
@@ -50,29 +46,43 @@ class MainActivity : AppCompatActivity() {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                // Handle the error here
-//                println("Request failed: ${e.message}")
-                d("TAG", e.message!!)
+                callback.onFailure(e.message.toString())
             }
 
             override fun onResponse(call: Call, response: Response) {
-                // Handle the response here
+                val body = response.body?.string()
+
                 try {
-                    val body = response.body?.string()
-                    // Handle the response here
                     body?.let {
-                        val result : ResultOutput? = Utils.extractInfoFromJson(it)
-                        val editable = Editable.Factory.getInstance().newEditable(
-                            result?.meanings?.get(0)?.definitions?.get(0) ?: "")
-                        resultEditText.text = editable
+                        val result: ResultOutput? = Utils.extractInfoFromJson(it)
+                        result?.let {
+                            callback.onSuccess(result)
+                        }
                     }
                 } catch (e: Exception) {
-                    // Handle the exception or log the error message
-                    e.printStackTrace()
-                    d("ERRor", e.message.toString())
+                    callback.onFailure(e.message.toString())
                 }
             }
         })
-    }// end function fetchWordDetails
+    }
+    override fun onSuccess(result: ResultOutput) {
+        runOnUiThread {
+            // UI update code here
+            d("MainActivity", "Result: $result")
+            val listView = findViewById<ListView>(R.id.list_view_id)
+            val adapter = CustomAdapter(this@MainActivity, result.meanings)
+            listView.adapter = adapter
+            adapter.notifyDataSetChanged()
+            hideKeyboard(this,wordInputText)
+        }
+    }
 
+
+    override fun onFailure(error: String) {
+        // Handle the failure
+    }
+    private fun hideKeyboard(context: Context, view: TextInputEditText) {
+        val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 }
