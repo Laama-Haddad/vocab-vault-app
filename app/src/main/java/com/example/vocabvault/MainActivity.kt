@@ -39,6 +39,8 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
                 volumeUKImageView.visibility = View.GONE
                 ukTextView.visibility = View.GONE
                 usTextView.visibility = View.GONE
+                voiceUrlUS=null
+                voiceUrlUK=null
             }
         }
         translateBtn.setOnClickListener {
