@@ -4,7 +4,6 @@ import CustomAdapter
 import android.content.Context
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log.d
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -39,8 +38,8 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
                 volumeUKImageView.visibility = View.GONE
                 ukTextView.visibility = View.GONE
                 usTextView.visibility = View.GONE
-                voiceUrlUS=null
-                voiceUrlUK=null
+                voiceUrlUS = null
+                voiceUrlUK = null
             }
         }
         translateBtn.setOnClickListener {
@@ -103,23 +102,22 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
     override fun onSuccess(result: ResultOutput) {
         runOnUiThread {
             // UI update code here
-            d("MainActivity", "Result: $result")
-            val audioList = result.audio
+            val audioList = result.audio.distinct()
             for (item in audioList) {
-                if (item.contains("-us", ignoreCase = true)) voiceUrlUS = item
-                if (item.contains("-uk", ignoreCase = true)) voiceUrlUK = item
+                if (item.audio.contains("-us", ignoreCase = true)) voiceUrlUS = item.audio
+                if (item.audio.contains("-uk", ignoreCase = true)) voiceUrlUK = item.audio
             }
-            if(voiceUrlUK==null){
+            if (voiceUrlUK == null) {
                 volumeUKImageView.visibility = View.GONE
                 ukTextView.visibility = View.GONE
-            }else{
+            } else {
                 volumeUKImageView.visibility = View.VISIBLE
                 ukTextView.visibility = View.VISIBLE
             }
-            if(voiceUrlUS==null){
+            if (voiceUrlUS == null) {
                 volumeUSImageView.visibility = View.GONE
                 usTextView.visibility = View.GONE
-            }else{
+            } else {
                 volumeUSImageView.visibility = View.VISIBLE
                 usTextView.visibility = View.VISIBLE
             }

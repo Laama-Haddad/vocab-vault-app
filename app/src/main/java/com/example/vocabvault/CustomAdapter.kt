@@ -7,7 +7,7 @@ import android.widget.TextView
 import com.example.vocabvault.MeaningResult
 import com.example.vocabvault.R
 
-class CustomAdapter(context: Context, private val dataList: List<MeaningResult>) :
+class CustomAdapter(context: Context, private val dataList: MutableList<MeaningResult>) :
     ArrayAdapter<MeaningResult>(context, 0, dataList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -19,7 +19,7 @@ class CustomAdapter(context: Context, private val dataList: List<MeaningResult>)
 
         val meaningResult = dataList[position]
         partOfSpeech.text = meaningResult.partOfSpeech
-        definition.text = meaningResult.definitions.firstOrNull()
+        definition.text = meaningResult.definitions.firstOrNull()?.definition ?: ""
 
         return view
     }

@@ -1,6 +1,5 @@
 package com.example.vocabvault
 
-import android.util.Log
 import com.google.gson.Gson
 
 class Utils {
@@ -10,30 +9,18 @@ class Utils {
             val wordEntries = gson.fromJson(jsonString, Array<WordEntry>::class.java)
             var word = wordEntries[0].word
             var phoneticList = wordEntries.flatMap { it.phonetics }
-            var audioList = phoneticList.map { it.audio }.distinct()
+            var audioList = phoneticList.map { it }.distinct().toMutableList()
             var meaningList = mutableListOf<MeaningResult>()
-            val mergedMeaningMap = mutableMapOf<String, MutableList<String>>()
+            var result: ResultOutput?
             wordEntries.forEach { it ->
                 for (item in it.meanings) {
                     var speech = item.partOfSpeech
-                    var defs = item.definitions.map { it.definition }
+                    var defs = item.definitions.map { it }.toMutableList()
                     var meaningResultItem = MeaningResult(speech, defs)
                     meaningList.add(meaningResultItem)
                 }
             }
-            meaningList.forEach { meaning ->
-                val partOfSpeech = meaning.partOfSpeech
-                val definitions = meaning.definitions
-                val mergedDefinitions = mergedMeaningMap.getOrDefault(partOfSpeech, mutableListOf())
-                mergedDefinitions.addAll(definitions)
-                mergedMeaningMap[partOfSpeech] = mergedDefinitions.distinct().toMutableList()
-            }
-            val mergedMeaningList = mergedMeaningMap.entries.map { entry ->
-                MeaningResult(entry.key, entry.value)
-            }
-            val result = ResultOutput(word, audioList, mergedMeaningList)
-            //Print Result
-            Log.d("HOHO", "${result.word}${result.audio}${result.meanings}")
+            result = ResultOutput(word, audioList, meaningList)
             return result
         }
     }
