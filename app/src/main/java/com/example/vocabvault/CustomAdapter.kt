@@ -1,4 +1,5 @@
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,13 +15,16 @@ class CustomAdapter(context: Context, private val dataList: MutableList<MeaningR
         val view = convertView ?: LayoutInflater.from(context)
             .inflate(R.layout.list_item_layout, parent, false)
 
-        val partOfSpeech = view.findViewById<TextView>(R.id.part_of_speech_text_view_id)
-        val definition = view.findViewById<TextView>(R.id.definition_text_view_id)
-
+        val partOfSpeechTextView = view.findViewById<TextView>(R.id.part_of_speech_text_view_id)
+        val definitionTextView = view.findViewById<TextView>(R.id.definition_text_view_id)
+        val moreTextView = view.findViewById<TextView>(R.id.more_text_view_id)
         val meaningResult = dataList[position]
-        partOfSpeech.text = meaningResult.partOfSpeech
-        definition.text = meaningResult.definitions.firstOrNull()?.definition ?: ""
+        partOfSpeechTextView.text = meaningResult.partOfSpeech
+        definitionTextView.text = meaningResult.definitions.firstOrNull()?.definition ?: ""
 
+        moreTextView.setOnClickListener{
+            Log.d("Custom Adapter", dataList[position].toString())
+        }
         return view
     }
 }
