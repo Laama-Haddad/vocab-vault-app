@@ -16,12 +16,13 @@ import okhttp3.*
 import java.io.IOException
 
 class MainActivity : AppCompatActivity(), ResponseCallback {
-    lateinit var wordInputText: TextInputEditText
-    lateinit var translateBtn: Button
+    private lateinit var wordInputText: TextInputEditText
+    private lateinit var translateBtn: Button
     private lateinit var volumeUKImageView: ImageView
     private lateinit var volumeUSImageView: ImageView
     private lateinit var ukTextView: TextView
     private lateinit var usTextView: TextView
+    private lateinit var meaningListView: ListView
     private var mediaPlayerUS: MediaPlayer? = null
     private var mediaPlayerUK: MediaPlayer? = null
     private var voiceUrlUS: String? = null
@@ -32,20 +33,22 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
         setContentView(R.layout.activity_main)
         initializeViews()
         wordInputText.addTextChangedListener {
-            translateBtn.isEnabled = !wordInputText.text.toString().trim().isEmpty()
-            if (!wordInputText.text.toString().trim().isEmpty()) {
+            translateBtn.isEnabled = wordInputText.text.toString().trim().isNotEmpty()
+            if (wordInputText.text.toString().trim().isNotEmpty()) {
                 volumeUSImageView.visibility = View.GONE
                 volumeUKImageView.visibility = View.GONE
                 ukTextView.visibility = View.GONE
                 usTextView.visibility = View.GONE
                 voiceUrlUS = null
                 voiceUrlUK = null
+                meaningListView.visibility = View.GONE
             }
         }
         translateBtn.setOnClickListener {
             val word = wordInputText.text
             if (word.toString().trim().isNotEmpty()) {
                 fetchWordDetails(word.toString(), this)
+                meaningListView.visibility = View.VISIBLE
             } else {
                 volumeUKImageView.visibility = View.GONE
                 volumeUSImageView.visibility = View.GONE
@@ -64,6 +67,7 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
         volumeUSImageView = findViewById(R.id.us_icon_id)
         ukTextView = findViewById(R.id.uk_text_view_id)
         usTextView = findViewById(R.id.us_text_view_id)
+        meaningListView = findViewById(R.id.list_view_id)
         translateBtn.isEnabled = false
         volumeUSImageView.visibility = View.GONE
         volumeUKImageView.visibility = View.GONE
