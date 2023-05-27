@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.*
@@ -68,6 +69,7 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
         ukTextView = findViewById(R.id.uk_text_view_id)
         usTextView = findViewById(R.id.us_text_view_id)
         meaningListView = findViewById(R.id.list_view_id)
+        translateBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.secondary))
         translateBtn.isEnabled = false
         volumeUSImageView.visibility = View.GONE
         volumeUKImageView.visibility = View.GONE
