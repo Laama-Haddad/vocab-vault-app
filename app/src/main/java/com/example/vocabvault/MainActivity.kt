@@ -3,6 +3,7 @@ package com.example.vocabvault
 import android.content.Context
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -12,6 +13,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.*
 import java.io.IOException
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
     private lateinit var ukTextView: TextView
     private lateinit var usTextView: TextView
     private lateinit var meaningListView: ListView
+    private lateinit var saveFab: FloatingActionButton
     private var mediaPlayerUS: MediaPlayer? = null
     private var mediaPlayerUK: MediaPlayer? = null
     private var voiceUrlUS: String? = null
@@ -43,22 +46,26 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
                 voiceUrlUS = null
                 voiceUrlUK = null
                 meaningListView.visibility = View.GONE
+                saveFab.visibility = View.GONE
             }
         }
         translateBtn.setOnClickListener {
             val word = wordInputText.text
             if (word.toString().trim().isNotEmpty()) {
                 fetchWordDetails(word.toString(), this)
-                meaningListView.visibility = View.VISIBLE
             } else {
                 volumeUKImageView.visibility = View.GONE
                 volumeUSImageView.visibility = View.GONE
                 ukTextView.visibility = View.GONE
                 usTextView.visibility = View.GONE
+                saveFab.visibility = View.GONE
             }
         }
         volumeUKImageView.setOnClickListener { onUKIconClick(it, voiceUrlUK!!) }
         volumeUSImageView.setOnClickListener { onUSIconClick(it, voiceUrlUS!!) }
+        saveFab.setOnClickListener {
+            Log.d("MainActivity", "Fab Clicked!!")
+        }
     }
 
     private fun initializeViews() {
@@ -69,12 +76,14 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
         ukTextView = findViewById(R.id.uk_text_view_id)
         usTextView = findViewById(R.id.us_text_view_id)
         meaningListView = findViewById(R.id.list_view_id)
+        saveFab = findViewById(R.id.save_floating_action_button_id)
         translateBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.secondary))
         translateBtn.isEnabled = false
         volumeUSImageView.visibility = View.GONE
         volumeUKImageView.visibility = View.GONE
         ukTextView.visibility = View.GONE
         usTextView.visibility = View.GONE
+        saveFab.visibility = View.GONE
     }
 
     private fun fetchWordDetails(word: String, callback: ResponseCallback) {
@@ -132,6 +141,8 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
             listView.adapter = adapter
             adapter.notifyDataSetChanged()
             hideKeyboard(this, wordInputText)
+            meaningListView.visibility = View.VISIBLE
+            saveFab.visibility = View.VISIBLE
         }
     }
 

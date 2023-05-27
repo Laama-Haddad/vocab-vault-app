@@ -50,7 +50,7 @@
                 android:id="@+id/us_icon_id"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/volume_up" />
+                android:src="@drawable/ic_volume_up" />
 
             <TextView
                 android:id="@+id/us_text_view_id"
@@ -71,7 +71,7 @@
                 android:id="@+id/uk_icon_id"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/volume_up" />
+                android:src="@drawable/ic_volume_up" />
 
             <TextView
                 android:id="@+id/uk_text_view_id"
@@ -89,4 +89,19 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp" />
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/save_floating_action_button_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:src="@drawable/ic_save"
+            app:elevation="0dp"
+            app:fabSize="mini"
+            app:tint="@null" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.appcompat.widget.LinearLayoutCompat>
