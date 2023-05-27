@@ -1,7 +1,9 @@
 package com.example.vocabvault
 
 data class WordEntry(
-    val word: String, val phonetics: MutableList<AudioEntry>, val meanings: MutableList<MeaningEntry>
+    val word: String,
+    val phonetics: MutableList<AudioEntry>,
+    val meanings: MutableList<MeaningEntry>
 )
 
 data class AudioEntry(
@@ -13,7 +15,7 @@ data class MeaningEntry(
 )
 
 data class DefinitionEntry(
-    val definition: String
+    var definition: String
 )
 
 data class MeaningResult(

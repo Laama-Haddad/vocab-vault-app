@@ -1,6 +1,5 @@
 package com.example.vocabvault
 
-import CustomAdapter
 import android.content.Context
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -27,6 +26,7 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
     private var mediaPlayerUK: MediaPlayer? = null
     private var voiceUrlUS: String? = null
     private var voiceUrlUK: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -192,5 +192,4 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
         mediaPlayerUK?.release()
         mediaPlayerUK = null
     }
-
 }
