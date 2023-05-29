@@ -8,7 +8,7 @@ open class Alert : AlertDialogCallback {
     private lateinit var alertDialog: AlertDialog
 
     override fun showAlert(view: View, context: Context) {
-        val builder = AlertDialog.Builder(context)
+        val builder = AlertDialog.Builder(context, R.style.CustomAlertDialogStyle)
         builder.setView(view)
         alertDialog = builder.create()
         alertDialog.show()
