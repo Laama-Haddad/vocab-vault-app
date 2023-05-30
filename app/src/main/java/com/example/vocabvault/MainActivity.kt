@@ -7,9 +7,8 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ListView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
@@ -23,10 +22,9 @@ import java.io.IOException
 class MainActivity : AppCompatActivity(), ResponseCallback {
     private lateinit var wordInputText: TextInputEditText
     private lateinit var translateBtn: Button
-    private lateinit var volumeUKImageView: ImageView
-    private lateinit var volumeUSImageView: ImageView
-    private lateinit var ukTextView: TextView
-    private lateinit var usTextView: TextView
+    private lateinit var bottomLinearLayout: LinearLayout
+    private lateinit var usLinearLayout: LinearLayout
+    private lateinit var ukLinearLayout: LinearLayout
     private lateinit var meaningListView: ListView
     private lateinit var tagsRecyclerView: RecyclerView
     private lateinit var saveFab: FloatingActionButton
@@ -42,14 +40,9 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
         wordInputText.addTextChangedListener {
             translateBtn.isEnabled = wordInputText.text.toString().trim().isNotEmpty()
             if (wordInputText.text.toString().trim().isNotEmpty()) {
-                volumeUSImageView.visibility = View.GONE
-                volumeUKImageView.visibility = View.GONE
-                ukTextView.visibility = View.GONE
-                usTextView.visibility = View.GONE
+                bottomLinearLayout.visibility = View.GONE
                 voiceUrlUS = null
                 voiceUrlUK = null
-                meaningListView.visibility = View.GONE
-                saveFab.visibility = View.GONE
             }
         }
         translateBtn.setOnClickListener {
@@ -57,15 +50,13 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
             if (word.toString().trim().isNotEmpty()) {
                 fetchWordDetails(word.toString(), this)
             } else {
-                volumeUKImageView.visibility = View.GONE
-                volumeUSImageView.visibility = View.GONE
-                ukTextView.visibility = View.GONE
-                usTextView.visibility = View.GONE
+                bottomLinearLayout.visibility = View.GONE
                 saveFab.visibility = View.GONE
             }
         }
-        volumeUKImageView.setOnClickListener { onUKIconClick(it, voiceUrlUK!!) }
-        volumeUSImageView.setOnClickListener { onUSIconClick(it, voiceUrlUS!!) }
+        usLinearLayout.setOnClickListener { onUSIconClick(it, voiceUrlUS!!) }
+        ukLinearLayout.setOnClickListener { onUKIconClick(it, voiceUrlUK!!) }
+
         saveFab.setOnClickListener {
             Log.d("MainActivity", "Fab Clicked!!")
         }
@@ -74,20 +65,15 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
     private fun initializeViews() {
         wordInputText = findViewById(R.id.word_text_input_id)
         translateBtn = findViewById(R.id.translate_button_id)
-        volumeUKImageView = findViewById(R.id.uk_icon_id)
-        volumeUSImageView = findViewById(R.id.us_icon_id)
-        ukTextView = findViewById(R.id.uk_text_view_id)
-        usTextView = findViewById(R.id.us_text_view_id)
+        bottomLinearLayout = findViewById(R.id.bottom_linear_layout_id)
+        usLinearLayout = findViewById(R.id.us_linear_layout_id)
+        ukLinearLayout = findViewById(R.id.uk_linear_layout_id)
         meaningListView = findViewById(R.id.meanings_list_view_id)
         tagsRecyclerView = findViewById(R.id.tags_recycler_view)
         saveFab = findViewById(R.id.save_floating_action_button_id)
         translateBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.secondary))
         translateBtn.isEnabled = false
-        volumeUSImageView.visibility = View.GONE
-        volumeUKImageView.visibility = View.GONE
-        ukTextView.visibility = View.GONE
-        usTextView.visibility = View.GONE
-        saveFab.visibility = View.GONE
+        bottomLinearLayout.visibility = View.GONE
     }
 
     private fun fetchWordDetails(word: String, callback: ResponseCallback) {
@@ -127,18 +113,14 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
                 if (item.audio.contains("-uk", ignoreCase = true)) voiceUrlUK = item.audio
             }
             if (voiceUrlUK == null) {
-                volumeUKImageView.visibility = View.GONE
-                ukTextView.visibility = View.GONE
+                ukLinearLayout.visibility = View.GONE
             } else {
-                volumeUKImageView.visibility = View.VISIBLE
-                ukTextView.visibility = View.VISIBLE
+                ukLinearLayout.visibility = View.VISIBLE
             }
             if (voiceUrlUS == null) {
-                volumeUSImageView.visibility = View.GONE
-                usTextView.visibility = View.GONE
+                usLinearLayout.visibility = View.GONE
             } else {
-                volumeUSImageView.visibility = View.VISIBLE
-                usTextView.visibility = View.VISIBLE
+                usLinearLayout.visibility = View.VISIBLE
             }
 
             val adapter = CustomAdapter(this@MainActivity, result.meanings)
@@ -156,8 +138,7 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
             tagsAdapter.notifyDataSetChanged()
 
             hideKeyboard(this, wordInputText)
-            meaningListView.visibility = View.VISIBLE
-            saveFab.visibility = View.VISIBLE
+            bottomLinearLayout.visibility = View.VISIBLE
         }
     }
 
