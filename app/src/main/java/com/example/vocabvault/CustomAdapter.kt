@@ -12,7 +12,7 @@ class CustomAdapter(context: Context, private var dataList: MutableList<MeaningR
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val itemLayoutView = convertView ?: LayoutInflater.from(context)
-            .inflate(R.layout.list_item_layout, parent, false)
+            .inflate(R.layout.meanings_list_item_layout, parent, false)
 
         val partOfSpeechTextView =
             itemLayoutView.findViewById<TextView>(R.id.part_of_speech_text_view_id)
@@ -28,7 +28,7 @@ class CustomAdapter(context: Context, private var dataList: MutableList<MeaningR
         moreTextView.setOnClickListener {
             val inflater = LayoutInflater.from(context)
             val alertDialogView = inflater.inflate(R.layout.definitions_dialog_layout, null)
-            val listView = alertDialogView.findViewById<ListView>(R.id.list_view1_id)
+            val listView = alertDialogView.findViewById<ListView>(R.id.defs_list_view_id)
             val adapter = DefinitionsDialogCustomAdapter(context, definitions, this, position)
             listView.adapter = adapter
             adapter.notifyDataSetChanged()
@@ -40,7 +40,6 @@ class CustomAdapter(context: Context, private var dataList: MutableList<MeaningR
                 customAlert.hideAlert()
             }
             customAlert.showAlert(alertDialogView, context)
-
         }
         return itemLayoutView
     }

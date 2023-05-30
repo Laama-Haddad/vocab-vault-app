@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
         volumeUSImageView = findViewById(R.id.us_icon_id)
         ukTextView = findViewById(R.id.uk_text_view_id)
         usTextView = findViewById(R.id.us_text_view_id)
-        meaningListView = findViewById(R.id.list_view_id)
+        meaningListView = findViewById(R.id.meanings_list_view_id)
         tagsRecyclerView = findViewById(R.id.tags_recycler_view)
         saveFab = findViewById(R.id.save_floating_action_button_id)
         translateBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.secondary))

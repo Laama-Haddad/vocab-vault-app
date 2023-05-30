@@ -18,7 +18,7 @@ class DefinitionsDialogCustomAdapter(
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val itemLayoutView = convertView ?: LayoutInflater.from(context)
             .inflate(R.layout.definitions_list_item_layout, parent, false)
-        val textView = itemLayoutView.findViewById<TextView>(R.id.textView)
+        val textView = itemLayoutView.findViewById<TextView>(R.id.def_alert_text_view_id)
 
         val definitions = dataList[position]
 
