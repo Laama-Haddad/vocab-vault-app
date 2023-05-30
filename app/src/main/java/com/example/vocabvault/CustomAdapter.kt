@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import java.util.*
 
 
 class CustomAdapter(context: Context, private var dataList: MutableList<MeaningResult>) :
@@ -22,7 +23,11 @@ class CustomAdapter(context: Context, private var dataList: MutableList<MeaningR
         val meaningResult = dataList[position]
         val definitions = meaningResult.definitions
 
-        partOfSpeechTextView.text = meaningResult.partOfSpeech
+        partOfSpeechTextView.text = meaningResult.partOfSpeech.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.ROOT
+            ) else it.toString()
+        }
         definitionTextView.text = definitions.firstOrNull()?.definition ?: ""
 
         moreTextView.setOnClickListener {

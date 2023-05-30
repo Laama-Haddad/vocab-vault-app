@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import java.util.*
 
 class TagsAdapter(
     private val dataList: MutableList<String>, private val tagClickListener: OnTagClickListener
@@ -40,12 +41,18 @@ class TagsAdapter(
 
         // Method to get the selected item based on position
         fun bind(tag: String, position: Int) {
-            tagTextView.text = tag
-            // Set the background color based on the selected position
+            tagTextView.text =
+                tag.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+            // Set the background and text based on the selected position
             if (position == selectedPosition) {
                 tagTextView.setBackgroundColor(
                     ContextCompat.getColor(
                         itemView.context, R.color.primary_variant
+                    )
+                )
+                tagTextView.setTextColor(
+                    ContextCompat.getColor(
+                        itemView.context, R.color.white
                     )
                 )
             } else {
