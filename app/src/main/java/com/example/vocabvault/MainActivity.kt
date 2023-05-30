@@ -13,6 +13,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.*
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
     private lateinit var ukTextView: TextView
     private lateinit var usTextView: TextView
     private lateinit var meaningListView: ListView
+    private lateinit var tagsRecyclerView: RecyclerView
     private lateinit var saveFab: FloatingActionButton
     private var mediaPlayerUS: MediaPlayer? = null
     private var mediaPlayerUK: MediaPlayer? = null
@@ -76,6 +79,7 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
         ukTextView = findViewById(R.id.uk_text_view_id)
         usTextView = findViewById(R.id.us_text_view_id)
         meaningListView = findViewById(R.id.list_view_id)
+        tagsRecyclerView = findViewById(R.id.tags_recycler_view)
         saveFab = findViewById(R.id.save_floating_action_button_id)
         translateBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.secondary))
         translateBtn.isEnabled = false
@@ -136,10 +140,21 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
                 volumeUSImageView.visibility = View.VISIBLE
                 usTextView.visibility = View.VISIBLE
             }
-            val listView = findViewById<ListView>(R.id.list_view_id)
+
             val adapter = CustomAdapter(this@MainActivity, result.meanings)
-            listView.adapter = adapter
+            meaningListView.adapter = adapter
             adapter.notifyDataSetChanged()
+
+            val tagsList: MutableList<String> = result.meanings.map { it ->
+                "${it.partOfSpeech}"
+            }.toMutableList()
+
+            val tagsAdapter = TagsAdapter(tagsList)
+            tagsRecyclerView.adapter = tagsAdapter
+            tagsRecyclerView.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            tagsAdapter.notifyDataSetChanged()
+
             hideKeyboard(this, wordInputText)
             meaningListView.visibility = View.VISIBLE
             saveFab.visibility = View.VISIBLE
