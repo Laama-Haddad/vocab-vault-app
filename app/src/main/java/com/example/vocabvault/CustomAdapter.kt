@@ -4,9 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 
 
 class CustomAdapter(context: Context, private var dataList: MutableList<MeaningResult>) :
@@ -29,12 +27,19 @@ class CustomAdapter(context: Context, private var dataList: MutableList<MeaningR
 
         moreTextView.setOnClickListener {
             val inflater = LayoutInflater.from(context)
-            val dialogView = inflater.inflate(R.layout.definitions_dialog_layout, null)
-            val listView = dialogView.findViewById<ListView>(R.id.list_view1_id)
+            val alertDialogView = inflater.inflate(R.layout.definitions_dialog_layout, null)
+            val listView = alertDialogView.findViewById<ListView>(R.id.list_view1_id)
             val adapter = DefinitionsDialogCustomAdapter(context, definitions, this, position)
             listView.adapter = adapter
             adapter.notifyDataSetChanged()
-            customAlert.showAlert(dialogView, context)
+
+            val headerAlertView =
+                alertDialogView.findViewById<LinearLayout>(R.id.header_alert_linear_id)
+            val backButton = headerAlertView.findViewById<ImageView>(R.id.arrow_back_icon_id)
+            backButton.setOnClickListener {
+                customAlert.hideAlert()
+            }
+            customAlert.showAlert(alertDialogView, context)
 
         }
         return itemLayoutView

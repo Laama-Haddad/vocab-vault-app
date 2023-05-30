@@ -7,10 +7,13 @@
     android:padding="16dp">
 
     <LinearLayout
+        android:id="@+id/header_alert_linear_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
 
         <ImageView
             android:id="@+id/arrow_back_icon_id"
@@ -27,7 +30,8 @@
             android:gravity="center"
             android:text="@string/definitions"
             android:textColor="@color/black"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <ListView
