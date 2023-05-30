@@ -6,4 +6,6 @@
     <string name="uk">UK</string>
     <string name="more">more</string>
     <string name="definitions">Definitions</string>
+    <string name="defaultTagToast">Your Default Tag is</string>
+    <string name="wrongToast">Something went wrong</string>
 </resources>

@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
@@ -19,7 +20,7 @@ import com.google.android.material.textfield.TextInputEditText
 import okhttp3.*
 import java.io.IOException
 
-class MainActivity : AppCompatActivity(), ResponseCallback {
+class MainActivity : AppCompatActivity(), ResponseCallback, OnTagClickListener {
     private lateinit var wordInputText: TextInputEditText
     private lateinit var translateBtn: Button
     private lateinit var bottomLinearLayout: LinearLayout
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
     private var mediaPlayerUK: MediaPlayer? = null
     private var voiceUrlUS: String? = null
     private var voiceUrlUK: String? = null
-
+    private lateinit var tagsAdapter: TagsAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -131,7 +132,7 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
                 "${it.partOfSpeech}"
             }.toMutableList()
 
-            val tagsAdapter = TagsAdapter(tagsList)
+            tagsAdapter = TagsAdapter(tagsList, this)
             tagsRecyclerView.adapter = tagsAdapter
             tagsRecyclerView.layoutManager =
                 LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -204,5 +205,15 @@ class MainActivity : AppCompatActivity(), ResponseCallback {
         mediaPlayerUS = null
         mediaPlayerUK?.release()
         mediaPlayerUK = null
+    }
+
+    override fun onTagClick(position: Int) {
+        val selectedItem = tagsAdapter.getSelectedItem(position)
+        val formattedMessage: String = if (selectedItem != null) {
+            getString(R.string.defaultTagToast) + " $selectedItem"
+        } else {
+            getString(R.string.wrongToast)
+        }
+        Toast.makeText(this, formattedMessage, Toast.LENGTH_SHORT).show()
     }
 }
