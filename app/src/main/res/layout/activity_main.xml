@@ -34,7 +34,6 @@
         android:text="@string/translate_title_button"
         android:textColor="@color/white" />
 
-
     <LinearLayout
         android:id="@+id/bottom_linear_layout_id"
         android:layout_width="match_parent"

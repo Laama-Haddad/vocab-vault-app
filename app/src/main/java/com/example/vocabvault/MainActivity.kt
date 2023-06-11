@@ -6,10 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.ListView
-import android.widget.Toast
+import android.widget.*
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
@@ -22,6 +20,7 @@ import okhttp3.*
 import java.io.IOException
 
 class MainActivity : AppCompatActivity(), ResponseCallback, OnTagClickListener {
+    private lateinit var walletImageView: ImageView
     private lateinit var wordInputText: TextInputEditText
     private lateinit var translateBtn: Button
     private lateinit var bottomLinearLayout: LinearLayout
@@ -39,6 +38,9 @@ class MainActivity : AppCompatActivity(), ResponseCallback, OnTagClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initializeViews()
+        walletImageView.setOnClickListener {
+            Log.d("MainActivity", "Here is wallet")
+        }
         wordInputText.addTextChangedListener {
             translateBtn.isEnabled = wordInputText.text.toString().trim().isNotEmpty()
             if (wordInputText.text.toString().trim().isNotEmpty()) {
@@ -65,6 +67,12 @@ class MainActivity : AppCompatActivity(), ResponseCallback, OnTagClickListener {
     }
 
     private fun initializeViews() {
+        // Get the action bar
+        val actionBar: ActionBar = supportActionBar!!
+        // Set the custom layout for the action bar
+        actionBar.setDisplayShowCustomEnabled(true)
+        actionBar.setCustomView(R.layout.action_bar_custom_view)
+        walletImageView = actionBar.customView.findViewById(R.id.wallet_image_view_id)
         wordInputText = findViewById(R.id.word_text_input_id)
         translateBtn = findViewById(R.id.translate_button_id)
         bottomLinearLayout = findViewById(R.id.bottom_linear_layout_id)
