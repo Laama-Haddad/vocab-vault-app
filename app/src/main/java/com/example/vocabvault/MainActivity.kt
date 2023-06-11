@@ -13,8 +13,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.*
@@ -134,8 +135,9 @@ class MainActivity : AppCompatActivity(), ResponseCallback, OnTagClickListener {
 
             tagsAdapter = TagsAdapter(tagsList, this)
             tagsRecyclerView.adapter = tagsAdapter
-            tagsRecyclerView.layoutManager =
-                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+            val layoutManager = FlexboxLayoutManager(this)
+            layoutManager.flexDirection = FlexDirection.ROW
+            tagsRecyclerView.layoutManager = layoutManager
             tagsAdapter.notifyDataSetChanged()
 
             hideKeyboard(this, wordInputText)
