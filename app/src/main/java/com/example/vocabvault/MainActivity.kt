@@ -1,6 +1,7 @@
 package com.example.vocabvault
 
 import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
@@ -39,7 +40,8 @@ class MainActivity : AppCompatActivity(), ResponseCallback, OnTagClickListener {
         setContentView(R.layout.activity_main)
         initializeViews()
         walletImageView.setOnClickListener {
-            Log.d("MainActivity", "Here is wallet")
+            val intent = Intent(this, VocabsWalletActivity::class.java)
+            startActivity(intent)
         }
         wordInputText.addTextChangedListener {
             translateBtn.isEnabled = wordInputText.text.toString().trim().isNotEmpty()
